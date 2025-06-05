@@ -1,11 +1,19 @@
-// src/App.tsx
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { Proveedorcontexto } from './0.CONTEXTO.App';
+import './App.css';
+import LogueoApp from './LogueoApp/Logueo.App';
+import RutasPublicasApp from './RUTAS/Rutas.Publicas.App';
 
 const App: React.FC = () => {
   return (
-    <div>
-      <h1>Hola desde App.tsx</h1>
-    </div>
+    <BrowserRouter>
+      <Proveedorcontexto>
+        <LogueoApp>
+          <RutasPublicasApp />
+        </LogueoApp>
+      </Proveedorcontexto>
+    </BrowserRouter>
   );
 };
 

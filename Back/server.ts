@@ -1,32 +1,32 @@
-// Cargar variables de entorno desde el archivo .env
-import 'dotenv/config'; // o: import dotenv from 'dotenv'; dotenv.config();
-
 import express from 'express';
-import * as path from 'path';
+import multer from 'multer';
+import cors from 'cors';
+import dotenv from 'dotenv';
 
+import { storage } from './configuracion.multer';
+import { accesoUser, isUser } from './CONTROLADORES/USERS';
+import { crearNewUser } from './CONTROLADORES/crearNewUser';
+import { getCustomers, putCustomers, deleteCustomers } from './CONTROLADORES/CUSTOMERS';
+import { endpoints } from './datos/endpoints';
+
+dotenv.config();
+const portNumber = 3000;
 const app = express();
+const upload = multer({ storage: storage });
 
-// Leer el puerto desde .env (con fallback a 3000)
-const PORT = process.env.PORT || 3000;
+app.use(cors());
+app.use(express.json());
 
-// Servir archivos estáticos (ajusta si usas otra ruta)
-const publicDir = path.join(__dirname, 'public');
-app.use(express.static(publicDir));
+// ENDPOINTS DE USUARIOS
+app.post(endpoints.acceso, accesoUser);
+app.post("/usuarios", upload.single("file"), crearNewUser);
 
-// Ruta principal de ejemplo
-app.get('/', (req, res) => {
-  res.send(`
-    <html>
-      <head><title>Servidor Básico</title></head>
-      <body>
-        <h1>Servidor en funcionamiento</h1>
-        <p>¡Hola, mundo!</p>
-      </body>
-    </html>
-  `);
-});
+// ENDPOINTS DE CLIENTES
+app.get(endpoints.customers, getCustomers);
+app.put(endpoints.customersEditar, isUser, putCustomers);
+app.delete(endpoints.customersBorrar, isUser, deleteCustomers);
 
-// Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+// ARRANCAR SERVIDOR
+app.listen(portNumber, () => {
+    console.log('Listening on localhost:' + portNumber);
 });

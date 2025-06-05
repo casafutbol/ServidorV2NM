@@ -1,3 +1,17 @@
-node_modules/
-dist/
+# Ignorar archivo de variables de entorno
 .env
+
+# Node modules
+node_modules/
+package-lock.json
+
+# Carpetas de build / producción
+dist/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos específicos de proyecto o pruebas
+datos/probas.bbdd.israel.ts
+proba.israel.db

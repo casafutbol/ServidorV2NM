@@ -1,4 +1,3 @@
-<!-- Back/public/login.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,11 +5,31 @@
   <title>Login</title>
 </head>
 <body>
-  <h1>Iniciar sesión</h1>
-  <form>
-    <input type="text" placeholder="Usuario" />
-    <input type="password" placeholder="Contraseña" />
+  <h1>Login</h1>
+  <form id="loginForm">
+    <input type="text" name="usuario" placeholder="Usuario" required />
+    <input type="password" name="password" placeholder="Contraseña" required />
     <button type="submit">Entrar</button>
   </form>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      // Cambiado a /guardarDatos para que coincida con la ruta del backend
+      const response = await fetch('/guardarDatos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      alert(result.mensaje);
+    });
+  </script>
 </body>
 </html>
