@@ -5,31 +5,42 @@
   <title>Login</title>
 </head>
 <body>
-  <h1>Login</h1>
+  <h1>Iniciar sesión</h1>
   <form id="loginForm">
     <input type="text" name="usuario" placeholder="Usuario" required />
     <input type="password" name="password" placeholder="Contraseña" required />
     <button type="submit">Entrar</button>
   </form>
-
-  <script>
-    const form = document.getElementById('loginForm');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-
-      // Cambiado a /guardarDatos para que coincida con la ruta del backend
-      const response = await fetch('/guardarDatos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-
-      const result = await response.json();
-      alert(result.mensaje);
+ <script>
+document.getElementById('loginForm').onsubmit = async function(e) {
+  e.preventDefault();
+  const usuario = e.target.usuario.value;
+  const password = e.target.password.value;
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ usuario, password })
     });
-  </script>
+    const data = await res.json();
+    alert(data.message);
+  } catch (err) {
+    alert('Error de conexión o del servidor');
+    console.error(err);
+  }
+};
+</script>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0d5292;
+      color: #333;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      color: #4CAF50;
+    }
+  </style>
 </body>
 </html>
