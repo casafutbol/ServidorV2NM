@@ -1,12 +1,25 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = require("express");
-var path_1 = require("path");
-var app = (0, express_1.default)();
-// Servir archivos estáticos desde la carpeta public
-app.use(express_1.default.static(path_1.default.resolve('public')));
-// Enviar el archivo index.html cuando accedas a la raíz "/"
-app.get('/', function (req, res) {
-    res.sendFile(path_1.default.resolve('public/index.html'));
+import express from "express";
+import loginRouter from "./Rutas/loginRouter.js";
+import registroRouter from "./Rutas/registroRouter.js";
+import usuariosRouter from "./Rutas/usuariosRouter.js";
+
+const app = express();
+const PORT = 3000;
+
+// Middleware para procesar JSON
+app.use(express.json());
+
+// Configuración de rutas
+app.use("/login", loginRouter);
+app.use("/registro", registroRouter);
+app.use("/usuarios", usuariosRouter);
+
+app.get("/", (req, res) => {
+  res.send("Servidor funcionando correctamente");
 });
-exports.default = app;
+
+// Inicio del servidor
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+});
+
